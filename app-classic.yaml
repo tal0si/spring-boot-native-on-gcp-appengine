@@ -1,0 +1,12 @@
+service: mvn-spring-native
+runtime: java17
+entrypoint: java -Xmx64m -jar ./target/spring-boot-native-on-gcp-appengine-0.0.1-SNAPSHOT.jar
+env: standard
+instance_class: F1
+automatic_scaling:
+  min_instances: 0
+  max_instances: 1
+  min_idle_instances: automatic
+  max_idle_instances: automatic
+  min_pending_latency: automatic
+  max_pending_latency: automatic

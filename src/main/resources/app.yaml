@@ -1,0 +1,22 @@
+logging:
+  level:
+    org.springframework: DEBUG
+server:
+  port: 8080
+
+#spring:
+#  security:
+#    user:
+#      password: changeme
+#  mvc:
+#    pathmatch:
+#      matching-strategy: ant_path_matcher
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5432/superfight
+#    username: postgres
+#    password: changeme
+#  jpaIOS:
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#    hibernate:
+#      ddl-auto: update
