@@ -74,22 +74,27 @@ gcloud app deploy --version X-Y-Z {path to your .yaml file}
 ```
 
 ### Build the project using Docker
-> /!\ For the moment you cannot build this project with a mac M1 due to incompatibility with AMD emulation
+
+Create 2 alias to build project
+```
+alias build-classic='docker run --rm -v ~/.m2:/root/.m2 -v $(pwd):/workspace -w /workspace --platform linux/amd64 eclipse-temurin:17-alpine ./mvnw clean package'
+alias build-native=' docker run --rm -v ~/.m2:/root/.m2 -v $(pwd):/workspace -w /workspace  --platform linux/amd64 ghcr.io/graalvm/graalvm-ce:ol8-java17 ./mvnw clean package -Pnative'
+```
+
+Create docker images
+
+```
+build-classic
+docker build -t springclassic --platform linux/amd64 -f docker/classic/Dockerfile .
+
+build-native
+docker build -t springnative --platform linux/amd64 -f docker/native/Dockerfile .
+```
 
 #### Run the container :
-*we'll use our existing image on DockerhHub*
-
-*for more information you can go to the DockerHub image page :*
-
-*https://hub.docker.com/repository/docker/talosi/mvn-spring-native/general*
-
-Mac / Linux:
 ```
-docker run -it -v $(pwd):/app talosi/mvn-spring-native bash
-```
-Windows
-```
-docker run -it -v %DIR%:/app talosi/mvn-spring-native bash
+docker run springclassic
+docker run springnative
 ```
 
 #### To build the project :
@@ -145,3 +150,10 @@ example /fibonacci/10 should show
 | 10 000 000 | 327ms      | 854ms             | 435ms   | 663ms          |
 | 30 000 000 | 894ms      | 2 495ms           | 1 523ms | 1 960ms        |
 | 90 000 000 | 3 571ms    | 7 026ms           | 4 464ms | 6 161ms        |
+
+
+
+kubectl run pod-start --image=springclassic --restart=Never --requests='memory=126Mi,cpu=125m'
+kubectl run pod-intermediate --image=springclassic --restart=Never --requests='memory=126Mi,cpu=250m'
+kubectl run pod-high --image=springclassic --restart=Never --requests='memory=512Mi,cpu=500m'
+kubectl run pod-max --image=springclassic --restart=Never --requests='memory=1024Mi,cpu=1000m'
